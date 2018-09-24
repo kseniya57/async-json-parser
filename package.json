@@ -1,0 +1,20 @@
+{
+  "name": "asp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --experimental-modules --no-warnings index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@fbet-gitlab.ex2b.co:kseniya/async-json-parser.git"
+  },
+  "keywords": ["json", "parser"],
+  "author": "Kseniya <kaprisa57@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.25.0"
+  }
+}
