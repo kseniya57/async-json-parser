@@ -1,13 +1,16 @@
 import Parser from './parser';
 import stream from 'stream';
 
-export const parse = async (stream) => {
+export const parse = async (str) => {
+  const s = new stream.Readable();
+  s.push(str);
+  s.push(null);
   const parser = new Parser();
   return new Promise((resolve) => {
-    stream.on('data', (data) => {
+    s.on('data', (data) => {
       parser.parse(data.toString()).then(_ => null);
     });
-    stream.on('end', () => {
+    s.on('end', () => {
       resolve(parser.get());
     });
   });
