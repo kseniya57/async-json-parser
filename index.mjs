@@ -1,7 +1,6 @@
-import fs from 'fs'
 import Parser from './parser'
 
-const asyncParse = async (stream) => {
+export const parse = async (stream) => {
   const parser = new Parser()
   return new Promise((resolve) => {
     stream.on('data', (data) => {
@@ -12,12 +11,3 @@ const asyncParse = async (stream) => {
     })
   })
 };
-
-import json from './test.json';
-
-const t = JSON.stringify(json);
-
-(async () => {
-  const stream = fs.createReadStream('test.json');
-  const res = await asyncParse(stream);
-})()

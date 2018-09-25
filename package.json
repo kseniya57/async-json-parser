@@ -1,10 +1,10 @@
 {
-  "name": "asp",
+  "name": "async-json-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
-    "start": "node --experimental-modules --no-warnings index.mjs"
+    "test": "node --experimental-modules --no-warnings test.mjs"
   },
   "repository": {
     "type": "git",
