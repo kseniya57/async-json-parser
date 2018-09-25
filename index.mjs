@@ -2,15 +2,24 @@ import Parser from './parser';
 import stream from 'stream';
 
 export const parse = async (str) => {
-  const s = new stream.Readable();
-  s.push(str);
-  s.push(null);
+  let readable;
+  if (typeof str === 'string') {
+    readable = new stream.Readable();
+    while (str.length) {
+      const len = Math.min(300000, str.length)
+      readable.push(str.substring(0, len));
+      str = str.substring(len)
+    }
+    readable.push(null);
+  } else {
+    readable = str; // stream
+  }
   const parser = new Parser();
   return new Promise((resolve) => {
-    s.on('data', (data) => {
+    readable.on('data', (data) => {
       parser.parse(data.toString()).then(_ => null);
     });
-    s.on('end', () => {
+    readable.on('end', () => {
       resolve(parser.get());
     });
   });
@@ -18,14 +27,14 @@ export const parse = async (str) => {
 
 export const stringify = (obj) => {
   return new Promise((resolve) => {
-    const s = new stream.Readable({objectMode: true});
-    s.push(obj);
-    s.push(null);
+    const readable = new stream.Readable({objectMode: true});
+    readable.push(obj);
+    readable.push(null);
     let str = '';
-    s.on('data', (data) => {
+    readable.on('data', (data) => {
       str += JSON.stringify(data)
     });
-    s.on('end', () => {
+    readable.on('end', () => {
       resolve(str);
     })
   })
