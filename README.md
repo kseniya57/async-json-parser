@@ -1,5 +1,7 @@
 # Async JSON parser
 
+## parse
+
 ```js
 import fs from 'fs';
 import {parse} from 'async-json-parser';
@@ -21,5 +23,18 @@ import Parser from 'async-json-parser/parser'
   await parser.parse(str);
   console.log(parser.get());
 })()
+```
+
+## stringify
+
+```js
+import fs from 'fs';
+import {stringify} from 'async-json-parser';
+import json from './test.json';
+
+(async () => {
+  const data = await stringify(json);
+  fs.writeFileSync('data.json', data);
+})();
 ```
 
