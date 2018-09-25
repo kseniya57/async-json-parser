@@ -1,70 +1,70 @@
-import assocPath from './utils/assocPath'
+import assocPath from './utils/assocPath';
 
 export default class Parser {
   constructor() {
-    this.result = {}
-    this.path = []
-    this.mode = 'object'
-    this.remaining = ''
+    this.result = {};
+    this.path = [];
+    this.mode = 'object';
+    this.remaining = '';
   }
 
   async parse(str) {
     const completeStr = this.remaining + str;
-    const matches = completeStr.match(/[{}\[\]]|"[^"]*":?|\d+/ig)
-    const last = matches[matches.length - 1]
-    this.remaining = completeStr.substring(completeStr.lastIndexOf(last) + last.length)
-    return this.process(matches)
+    const matches = completeStr.match(/[{}\[\]]|"[^"]*":?|\d+/ig);
+    const last = matches[matches.length - 1];
+    this.remaining = completeStr.substring(completeStr.lastIndexOf(last) + last.length);
+    return this.process(matches);
   }
 
   set(v) {
-    this.result = assocPath(this.path, v, this.result)
+    this.result = assocPath(this.path, v, this.result);
   }
 
   get() {
-    return this.result
+    return this.result;
   }
 
   process(matches) {
     return new Promise((resolve) => {
       while (matches.length) {
-        const m = matches.shift()
+        const m = matches.shift();
         if (m.endsWith(':')) {
-          const prop = m.replace(/[":]/ig, '')
-          const v = matches.shift()
+          const prop = m.replace(/[":]/ig, '');
+          const v = matches.shift();
           if (!v) {
-            this.remaining = m + this.remaining
-            resolve(true)
-            return
+            this.remaining = m + this.remaining;
+            resolve(true);
+            return;
           }
-          this.path.push(prop)
+          this.path.push(prop);
           if (v === '{') {
-            this.mode = 'object'
-            this.set({})
+            this.mode = 'object';
+            this.set({});
           } else if (v === '[') {
-            this.set([])
-            this.path.push(-1)
+            this.set([]);
+            this.path.push(-1);
           } else {
-            this.set(v.replace(/"/g, ''))
-            this.path.pop()
+            this.set(v.replace(/"/g, ''));
+            this.path.pop();
           }
         } else if (m === ']') {
-          this.path.pop()
-          this.path.pop()
+          this.path.pop();
+          this.path.pop();
         } else if (typeof this.path[this.path.length - 1] === 'number') { // array
           if (m !== '}') {
-            const idx = this.path.pop()
-            this.path.push(idx + 1)
+            const idx = this.path.pop();
+            this.path.push(idx + 1);
             if (m === '{') {
-              this.set({})
+              this.set({});
             } else {
-              this.set(m.replace(/"/g, ''))
+              this.set(m.replace(/"/g, ''));
             }
           }
         } else if (m === '}') { //  && typeof this.path[this.path.length - 1] !== 'number'
-          this.path.pop()
+          this.path.pop();
         }
       }
-      resolve(true)
-    })
+      resolve(true);
+    });
   }
 }

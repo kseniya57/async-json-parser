@@ -10,7 +10,10 @@
     "type": "git",
     "url": "git@fbet-gitlab.ex2b.co:kseniya/async-json-parser.git"
   },
-  "keywords": ["json", "parser"],
+  "keywords": [
+    "json",
+    "parser"
+  ],
   "author": "Kseniya <kaprisa57@gmail.com>",
   "license": "ISC"
 }
