@@ -11,10 +11,13 @@ const asyncParse = async (stream) => {
       resolve(parser.get())
     })
   })
-}
+};
+
+import json from './test.json';
+
+const t = JSON.stringify(json);
 
 (async () => {
-  const stream = fs.createReadStream('test.json')
-  const res = await asyncParse(stream)
-  console.log(JSON.stringify(res).length)
+  const stream = fs.createReadStream('test.json');
+  const res = await asyncParse(stream);
 })()

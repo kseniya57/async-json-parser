@@ -1,4 +1,4 @@
-import R from 'ramda'
+import assocPath from './utils/assocPath'
 
 export default class Parser {
   constructor() {
@@ -17,7 +17,7 @@ export default class Parser {
   }
 
   set(v) {
-    this.result = R.assocPath(this.path, v, this.result)
+    this.result = assocPath(this.path, v, this.result)
   }
 
   get() {
@@ -41,7 +41,6 @@ export default class Parser {
             this.mode = 'object'
             this.set({})
           } else if (v === '[') {
-            this.mode = 'array'
             this.set([])
             this.path.push(-1)
           } else {
@@ -51,17 +50,17 @@ export default class Parser {
         } else if (m === ']') {
           this.path.pop()
           this.path.pop()
-          this.mode = 'object'
-        } else if (this.mode === 'array') { // array
-          const idx = this.path.pop()
-          this.path.push(idx + 1)
-          if (m === '{') {
-            this.set({})
-          } else {
-            this.set(m.replace(/"/g, ''))
+        } else if (typeof this.path[this.path.length - 1] === 'number') { // array
+          if (m !== '}') {
+            const idx = this.path.pop()
+            this.path.push(idx + 1)
+            if (m === '{') {
+              this.set({})
+            } else {
+              this.set(m.replace(/"/g, ''))
+            }
           }
-        }
-        if (m === '}') {
+        } else if (m === '}') { //  && typeof this.path[this.path.length - 1] !== 'number'
           this.path.pop()
         }
       }

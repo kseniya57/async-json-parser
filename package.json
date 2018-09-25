@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --experimental-modules --no-warnings index.mjs"
   },
   "repository": {
@@ -13,8 +12,5 @@
   },
   "keywords": ["json", "parser"],
   "author": "Kseniya <kaprisa57@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "ramda": "^0.25.0"
-  }
+  "license": "ISC"
 }
