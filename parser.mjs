@@ -10,7 +10,7 @@ export default class Parser {
 
   async parse(str) {
     const completeStr = this.remaining + str;
-    const matches = completeStr.match(/[{}\[\]]|"[^"]*":?|\d+/ig);
+    const matches = completeStr.match(/[{}\[\]]|"[^"]*":?|true|false|\d+/ig);
     const last = matches[matches.length - 1];
     this.remaining = completeStr.substring(completeStr.lastIndexOf(last) + last.length);
     return this.process(matches);
@@ -22,6 +22,10 @@ export default class Parser {
 
   get() {
     return this.result;
+  }
+
+  static processValue(v) {
+    return Number.isNaN(+v) ? ['true', 'false'].includes(v) ? Boolean(v) : v.replace(/"/g, '') : +v;
   }
 
   process(matches) {
@@ -44,7 +48,7 @@ export default class Parser {
             this.set([]);
             this.path.push(-1);
           } else {
-            this.set(v.replace(/"/g, ''));
+            this.set(Parser.processValue(v));
             this.path.pop();
           }
         } else if (m === ']') {
@@ -57,10 +61,10 @@ export default class Parser {
             if (m === '{') {
               this.set({});
             } else {
-              this.set(m.replace(/"/g, ''));
+              this.set(Parser.processValue(m));
             }
           }
-        } else if (m === '}') { //  && typeof this.path[this.path.length - 1] !== 'number'
+        } else if (m === '}') {
           this.path.pop();
         }
       }

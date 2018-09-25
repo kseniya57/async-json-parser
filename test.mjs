@@ -1,5 +1,6 @@
 import fs from 'fs';
 import {parse} from './index';
+import json from './test.json';
 
 (async () => {
   const stream = fs.createReadStream('test.json');
